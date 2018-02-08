@@ -1,0 +1,6 @@
+.deploy_cfg
+*.pyc
+
+__pycache__
+.cache
+.pytest_cache
