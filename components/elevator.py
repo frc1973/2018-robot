@@ -38,4 +38,4 @@ class Elevator:
                 self.active = False
 
         self.elevator_motor.set(self.speed)
-        speed = 0
+        self.speed = 0
