@@ -28,7 +28,7 @@ class Elevator:
 
     def gotoBottom(self):
         if self.active:
-            self.spepd = -1
+            self.speed = -1
             if self.elevator_top.get():
                 self.speed = 0
                 self.active = False
