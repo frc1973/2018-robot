@@ -12,6 +12,8 @@ class Robot(magicbot.MagicRobot):
 
     def createObjects(self):
 
+        # GOTTA DO STUFF
+
         # Elevator motor/sensors
         self.elevator_motor = wpilib.Talon(1)
         self.elevator_top = wpilib.DigitalInput(1)
