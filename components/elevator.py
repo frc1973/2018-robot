@@ -9,8 +9,8 @@ class Elevator:
     elevator_mid = wpilib.DigitalInput
     elevator_bottom = wpilib.DigitalInput
 
-    active = False
-    activeTop = False
+    active = False # gotoMiddle var name
+    activeTop = False # gotoTop var name
 
     speed = 0
 
@@ -34,7 +34,7 @@ class Elevator:
                 self.active = False
 
     def execute(self): # This is the start
-        if self.active:
+        if self.active: # gotoMiddle action
             self.speed = -1
             if self.elevator_mid.get():
                 self.speed = 0
@@ -43,7 +43,7 @@ class Elevator:
         self.elevator_motor.set(self.speed)
         self.speed = 0
 
-        # gotoTop
+        # gotoTop action
         if self.activeTop:
             self.speed = -1
             if self.elevator_top.get():
