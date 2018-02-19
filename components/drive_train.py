@@ -1,8 +1,6 @@
 import math
 import wpilib
 
-from magicbot #import tunable
-
 class DriveTrain:
     '''
         Simple magicbot drive object
@@ -18,8 +16,8 @@ class DriveTrain:
 
     #MaxY = tunable(0.8)
 
-    ultrasonic = wpilib.AnalogInput
-    myRobot = wpilib.RobotDrive
+    #ultrasonic = wpilib.AnalogInput
+    drive = wpilib.drive.DifferentialDrive
 
     def __init__(self):
         self.x = 0
@@ -32,41 +30,10 @@ class DriveTrain:
     def rotate(self, x):
         self.x = x
 
-    #def atWall(self):
-    #    return abs(self.getDistance()) < 0.15
-
-    #def driveToWall(self):
-
-    #    distance = self.getDistance()
-    #    distance = max(min(14.0, distance), -self.offset)
-
-    #    if abs(distance)<0.15:
-    #        self.y = 0
-    #        self.x = 0
-    #    else:
-
-    #        y = self.wall_p*distance
-
-#            scaled_y = 0.5 + abs(y)/30.0
-#            scaled_y = math.copysign(scaled_y, y)
-
-#            scaled_y = max(min(self.MaxY, scaled_y), -self.MaxY)
-
-#            self.y = scaled_y
-
-
-
-#    def getDistance(self):
-        # returns distance in feet
-#        return (self.ultrasonic.getAverageVoltage()/0.3) - self.offset
-
     def execute(self):
         self.tx = self.x
         self.ty = self.y
-        self.myRobot.arcadeDrive(self.y, self.x, True)
-
-        self.distance = self.getDistance()
-        self.analog = self.ultrasonic.getAverageVoltage()
+        self.drive.arcadeDrive(self.y, self.x, True)
 
         self.x = 0
         self.y = 0
