@@ -1,7 +1,7 @@
-import math
+#import math
 import wpilib
 
-from magicbot #import tunable
+#from magicbot #import tunable
 
 class DriveTrain:
     '''
@@ -18,8 +18,8 @@ class DriveTrain:
 
     #MaxY = tunable(0.8)
 
-    ultrasonic = wpilib.AnalogInput
-    myRobot = wpilib.RobotDrive
+    #ultrasonic = wpilib.AnalogInput
+    #myRobot = wpilib.RobotDrive
 
     def __init__(self):
         self.x = 0
@@ -65,7 +65,7 @@ class DriveTrain:
         self.ty = self.y
         self.myRobot.arcadeDrive(self.y, self.x, True)
 
-        self.distance = self.getDistance()
+        #self.distance = self.getDistance()
         self.analog = self.ultrasonic.getAverageVoltage()
 
         self.x = 0
