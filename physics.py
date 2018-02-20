@@ -39,6 +39,8 @@ class PhysicsEngine(object):
 
         self.physics_controller = physics_controller
         self.position = 0
+        
+        self.elevator_position = 0
 
         self.ft_per_sec = 5
         self.wheel_circumference = 18.8
@@ -78,5 +80,30 @@ class PhysicsEngine(object):
         # -> encoder = distance / (wheel_circumference / 360.0)
 
         hal_data['encoder'][0]['count'] += int(distance_inches / (self.wheel_circumference/360.0))
+        
+        # Elevator simulation
+        e_motor = hal_data['pwm'][2]['value']
+        e_distance = e_motor * tm_diff * (5.0/2.0)
+        #print(e_distance)
+        
+        self.elevator_position = (self.elevator_position + e_distance)
+        self.elevator_position = max(min(5, self.elevator_position), 0)
+        
+        # Set our limit switches
+        if 0 <= self.elevator_position < 0.2:
+            hal_data['dio'][3]['value'] = True
+        else:
+            hal_data['dio'][3]['value'] = False
+        
+        if 2.4 < self.elevator_position < 2.6:
+            hal_data['dio'][2]['value'] = True
+        else:
+            hal_data['dio'][2]['value'] = False
+        
+        if 4.9 < self.elevator_position <= 5:
+            hal_data['dio'][1]['value'] = True
+        else:
+            hal_data['dio'][1]['value'] = False
+        
 
         
