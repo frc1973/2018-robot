@@ -1,3 +1,5 @@
+
+
 import wpilib
 import wpilib.drive
 
@@ -23,12 +25,12 @@ class Forklift():
         self.potentiometer = potentiometer
 
     def getWinchSpeedLimit(self, state, direction):
-            """
+        """
 
             Get the Max speed of the winch motor
             based on where the Forklift is
 
-            """
+        """
 
         if state == STATE_TOP and direction == GOING_UP:
             return 0
@@ -72,6 +74,7 @@ class Forklift():
 
             Convert forklift winch motor commanded
             value to a direction
+
         """
         joystick = self.joystick.getY() # TODO: verify Y is forward/back
         if joystick_command > 0:
@@ -86,7 +89,7 @@ class Forklift():
         direction = self.joystickCommandToDirection()
         max_speed = self.getWinchSpeedLimit(state, direction)
 
-        #TODO check joystick speed commands (buttons) and set speed based on Joystick
+        #TODO: check joystick speed commands (buttons) and set speed based on Joystick
         # and speed limit
         # Obey the joystick, unless it goes above the speed limit
 

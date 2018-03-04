@@ -39,9 +39,6 @@ class MyRobot(wpilib.IterativeRobot):
         self.other_motor2.set(self.forklift_stick.getZ())
 
         self.forklift_stick.getTrigger()
-    # --------------------------------------------------------------------------
-
-
-    # --------------------------------------------------------------------------
+        
 if __name__ == "__main__":
     wpilib.run(MyRobot)
