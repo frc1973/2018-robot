@@ -5,27 +5,27 @@ import wpilib.drive
 
 import ctre
 
+STATE_TOP = 0
+STATE_NEAR_TOP = 1
+STATE_MIDDLE = 2
+STATE_NEAR_BOTTOM = 3
+STATE_BOTTOM = 4
+STATE_NEAR_MIDDLE = 5
 
-class Forklift():
-    GOING_UP = 1
-    GOING_DOWN = -1
-    SLOW = 1.0/3.0
-    MEDIUM = 0.5
-    FAST = 0.9
+GOING_UP = 1
+GOING_DOWN = -1
+SLOW = 1.0/3.0
+MEDIUM = 0.5
+FAST = 0.9
 
-    STATE_TOP = 0
-    STATE_NEAR_TOP = 1
-    STATE_MIDDLE = 2
-    STATE_NEAR_BOTTOM = 3
-    STATE_BOTTOM = 4
+class Forklift:
 
-    def __init__(self, joystick, winch_motor):
-        self.joystick = joystick
-        self.winch_motor = winch_motor
-        self.encoder = None #TODO:
-        self.top_limit_switch = wpilib.DigitalInput(1) # TODO
-        self.bot_limit_switch = wpilib.DigitalInput(2) # TODO
-        self.joystick_speed = 0
+
+    winch_motor = ctre.WPI_TalonSRX
+    forklift_stick = wpilib.Joystick
+
+    joystick_speed = 0
+
 
     def getWinchSpeedLimit(self, state, direction):
         """
@@ -59,18 +59,19 @@ class Forklift():
         POSITION_MID_BOTTOM = 2000
         POSITION_BOTTOM = 1000
 
-        position = self.encoder.getPosition() # TODO figure out how to get encoder value
+        position = self.winch_motor.getQuadraturePosition()
 
-        if self.top_limit_switch.get():
+        fwd, rev = self.winch_motor.getLimitSwitchState()
+        if fwd:
             return STATE_TOP
-        elif self.bot_limit_switch.get():
+        elif rev:
             return STATE_BOTTOM
 
         if position >= POSITION_TOP:
             return STATE_TOP # Stop
         elif position < POSITION_TOP and position >= POSITION_MID_TOP:
             return STATE_NEAR_TOP # Keep going
-        elif position < POSITION _MID_TOP and position >= POSITION_MID_BOTTOM:
+        elif position < POSITION_MID_TOP and position >= POSITION_MID_BOTTOM:
             return STATE_NEAR_MIDDLE # Keep going
         elif position < POSITION_MID_BOTTOM and position >= POSITION_BOTTOM:
             return STATE_NEAR_BOTTOM # Stop
@@ -84,7 +85,7 @@ class Forklift():
             value to a direction
 
         """
-        joystick_command = self.joystick.getY() # TODO: verify Y is forward/back
+        joystick_command = self.forklift_stick.getY() # TODO: verify Y is forward/back
         if joystick_command > 0:
             return GOING_UP
         elif joystick_command < 0:
@@ -103,19 +104,19 @@ class Forklift():
         if self.joystickCommandToDirection() == 0:
             self.joystick_speed = 0
         # if he's pushing the joystick and he pressed the slow button
-        elif self.joystick.getRawButton(4):
+        elif self.forklift_stick.getRawButton(4):
             self.joystick_speed = SLOW
         # if he's pushing the joystick and he pressed the medium button
-        elif self.joystick.getRawButton(3):
+        elif self.forklift_stick.getRawButton(3):
             self.joystick_speed = MEDIUM
         # if he's pushing the joystick and he pressed the fast button
-        elif self.joystick.getRawButton(5):
+        elif self.forklift_stick.getRawButton(5):
             self.joystick_speed = FAST
         # if he just pushed the joystick and has not set any speed yet
         elif self.joystick_speed == 0:
             self.joystick_speed = SLOW
 
-    def setSpeed(self):
+    def execute(self):
         state = self.positionToState()
         direction = self.joystickCommandToDirection()
         speed_limit = self.getWinchSpeedLimit(state, direction)
