@@ -83,11 +83,11 @@ class PhysicsEngine(object):
 
         # Elevator simulation
         e_motor = hal_data['CAN'][7]['value']
-        e_distance = e_motor * tm_diff * (5.0/2.0)
+        e_distance = e_motor * tm_diff * 2
         #print(e_distance)
 
         self.elevator_position = (self.elevator_position + e_distance)
-        self.elevator_position = max(min(5, self.elevator_position), 0)
+        self.elevator_position = max(min(6, self.elevator_position), 0)
 
         hal_data['CAN'][7]['quad_position'] = int(self.elevator_position * (360 * 4))
 
@@ -99,7 +99,7 @@ class PhysicsEngine(object):
             hal_data['CAN'][7]['limit_switch_closed_rev'] = False
 
         # When is at the top - do this
-        if 4.9 <= self.elevator_position < 5.0:
+        if 5.9 <= self.elevator_position < 6.0:
             hal_data['CAN'][7]['limit_switch_closed_for'] = True
         # if it's not at the top - don't do this
         else:
