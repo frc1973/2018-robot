@@ -44,7 +44,7 @@ class Robot(magicbot.MagicRobot):
 
         # Other motors
         self.winch_motor = ctre.WPI_TalonSRX(7)
-        self.other_motor2 = ctre.WPI_TalonSRX(8)
+        self.arm_motor = ctre.WPI_TalonSRX(8)
 
         # choose the sensor and sensor direction
         self.winch_motor.configSelectedFeedbackSensor(WPI_TalonSRX.FeedbackDevice.CTRE_MagEncoder_Relative, self.kPIDLoopIdx, self.kTimeoutMs)
@@ -110,6 +110,17 @@ class Robot(magicbot.MagicRobot):
             self.forklift.mid()
         if self.joy.getRawButton(5):
             self.forklift.bot()
+            
+        if self.joy.getRawButton(7):
+            self.forklift.normal(self.joy.getZ())
+        
+        # control the arm
+        if self.joy.getRawButton(1):
+            self.arm_motor.set(.5)
+        elif self.joy.getRawButton(2):
+            self.arm_motor.set(-.5)
+        else:
+            self.arm_motor.set(0)
 
 
 if __name__ == '__main__':
