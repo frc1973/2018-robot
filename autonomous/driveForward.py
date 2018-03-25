@@ -11,8 +11,12 @@ class DriveForward(AutonomousStateMachine):
     DEFAULT = True
 
     # Injected from the definition in robot.py
-    driveTrain = DriveTrain
+    driveTrain: DriveTrain
 
-    @timed_state(duration = 3, first=True)
-    def drive_forward(self):
+    @timed_state(duration=3, first=True, next_state='drop_cube')
+    def drive_forward(self, initial_call):
         self.driveTrain.move(-0.7, 0)
+
+    @state
+    def drop_cube(self):
+        pass
