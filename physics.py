@@ -29,6 +29,7 @@ class PhysicsEngine(object):
         Simulates a motor moving something that strikes two limit switches,
         one on each end of the track. Obviously, this is not particularly
         realistic, but it's good enough to illustrate the point
+
     '''
 
     def __init__(self, physics_controller):
@@ -41,6 +42,7 @@ class PhysicsEngine(object):
         self.position = 0
 
         self.elevator_position = 0
+        self.fork_position = 0
 
         self.ft_per_sec = 5
         self.wheel_circumference = 18.8
@@ -120,3 +122,14 @@ class PhysicsEngine(object):
         #     hal_data['dio'][1]['value'] = True
         # else:
         #     hal_data['dio'][1]['value'] = False
+
+        # arm motor limit switches
+        # -> it's on if either end is hit
+        arm_motor = hal_data['CAN'][8]['value']
+        self.fork_position += arm_motor * tm_diff
+
+        self.fork_position = max(min(3, self.fork_position), 0)
+        if (0 <= self.fork_position <= 0.1) or (2.9 <= self.fork_position <= 3):
+            hal_data['dio'][1]['value'] = True
+        else:
+            hal_data['dio'][1]['value'] = False

@@ -6,6 +6,7 @@ import wpilib.drive
 
 import components.forklift
 import components.drive_train
+import components.fork
 
 import ctre
 
@@ -14,8 +15,9 @@ from ctre import WPI_TalonSRX
 
 class Robot(magicbot.MagicRobot):
 
-    forklift = components.forklift.Forklift
-    driveTrain = components.drive_train.DriveTrain
+    forklift: components.forklift.Forklift
+    fork: components.fork.Fork
+    driveTrain: components.drive_train.DriveTrain
 
     #: Which PID slot to pull gains from. Starting 2018, you can choose from
     #: 0,1,2 or 3. Only the first two (0,1) are visible in web-based
@@ -30,9 +32,15 @@ class Robot(magicbot.MagicRobot):
     #: report to DS if action fails.
     kTimeoutMs = 10
 
+    twitchyX = magicbot.tunable(0.7) #
+    twitchyY = magicbot.tunable(0.7)
+
+
     def createObjects(self):
 
         # GOTTA DO STUFF
+        self.fork_switch = wpilib.DigitalInput(1)
+        self.gyro = wpilib.ADXRS450_Gyro()
 
         self.left_motor = ctre.WPI_TalonSRX(5)
         self.right_motor = ctre.WPI_TalonSRX(6)
@@ -44,8 +52,8 @@ class Robot(magicbot.MagicRobot):
 
         # Other motors
         self.winch_motor = ctre.WPI_TalonSRX(7)
-        self.arm_motor = ctre.WPI_TalonSRX(8)
 
+        self.arm_motor = ctre.WPI_TalonSRX(8)
         # choose the sensor and sensor direction
         self.winch_motor.configSelectedFeedbackSensor(WPI_TalonSRX.FeedbackDevice.CTRE_MagEncoder_Relative, self.kPIDLoopIdx, self.kTimeoutMs)
 
@@ -81,7 +89,6 @@ class Robot(magicbot.MagicRobot):
 
 
 
-
         # Elevator motor/sensors
         #self.elevator_top = wpilib.DigitalInput(1)
         #self.elevator_mid = wpilib.DigitalInput(2)
@@ -97,7 +104,20 @@ class Robot(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
 
-        self.driveTrain.move(self.joy.getY(), self.joy.getX())
+        self.driveTrain.move(self.twitchyY*self.joy.getY(), self.twitchyY*self.joy.getX())
+
+        # if self.joy.getRawButton(8):
+        #    self.driveTrain.move2(-90)
+        # elif self.joy.getRawButton(9):
+        #    self.driveTrain.move2(90)
+
+        # Creating the buttom for the actuator/fork
+        # if self.joy.getRawButton(1):
+        #    self.fork.OPEN()
+
+
+        # TODO: center of gravity compensation
+
 
         # y = self.joy.getY()
         # b3 = self.joy.getRawButton(3)
@@ -110,17 +130,15 @@ class Robot(magicbot.MagicRobot):
             self.forklift.mid()
         if self.joy.getRawButton(5):
             self.forklift.bot()
-            
+
         if self.joy.getRawButton(7):
             self.forklift.normal(self.joy.getZ())
-        
+
         # control the arm
-        if self.joy.getRawButton(1):
-            self.arm_motor.set(.5)
-        elif self.joy.getRawButton(2):
-            self.arm_motor.set(-.5)
-        else:
-            self.arm_motor.set(0)
+        if self.joy.getRawButton(1): # This is trigger
+            self.fork.close()
+        elif self.joy.getRawButton(2): # This is the other
+            self.fork.open()
 
 
 if __name__ == '__main__':

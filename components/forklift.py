@@ -7,10 +7,9 @@
 import ctre
 from ctre import WPI_TalonSRX
 
+from magicbot import tunable
 
-GotoTop = 30000
-GotoMid = 17000
-GotoBot = 0
+
 
 class Forklift:
     winch_motor: ctre.WPI_TalonSRX
@@ -19,8 +18,16 @@ class Forklift:
     mode = 'pct'
     pct = 0
 
+    encoder = tunable(0)
+    pid_p = tunable(0.9)
+    set_p = None
+
     def execute(self):
-        
+
+        if self.set_p is None or abs(self.set_p - self.pid_p) < 0.0001:
+            self.winch_motor.config_kP(0, self.pid_p, 0)
+            self.set_p = self.pid_p
+
         if self.mode == 'pct':
             self.winch_motor.set(self.pct)
             self.pct = 0
@@ -28,12 +35,15 @@ class Forklift:
             # Don't uncomment this until we test it!
             #self.winch_motor.set(WPI_TalonSRX.ControlMode.Position, self.position)
             pass
-        
+
+        self.encoder = self.winch_motor.getSensorCollection().getQuadraturePosition()
+
+
+
+
     def normal(self, v):
         self.mode = 'pct'
         self.pct = v
-        
-
 
     '''
         Figure out the exact

@@ -13,6 +13,6 @@ class DriveForward(AutonomousStateMachine):
     # Injected from the definition in robot.py
     driveTrain = DriveTrain
 
-    @timed_state(duration=3, first=True)
+    @timed_state(duration = 3, first=True)
     def drive_forward(self):
         self.driveTrain.move(-0.7, 0)
