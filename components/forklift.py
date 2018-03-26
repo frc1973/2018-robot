@@ -53,11 +53,11 @@ class Forklift:
 
     def top(self):
         self.mode = 'pos'
-        self.position = 7000
+        self.position = 3500
 
     def mid(self):
         self.mode = 'pos'
-        self.position = 4000
+        self.position = 2000
 
     def bot(self):
         self.mode = 'pos'

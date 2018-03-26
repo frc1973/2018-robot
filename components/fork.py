@@ -15,9 +15,13 @@ class Fork:
     last_position = 0
 
     def execute(self):
-        if self.position != 0: # if nothing is being pressed - do this
+        # if the limit switch is on and you last opened it,
+        # and you are trying to open it
+        if self.fork_switch.get() and self.last_position == self.position:
+            self.position = 0
+        elif self.position != 0: # if nothing is being pressed - do this
             self.last_position = self.position
-
+            
         self.arm_motor.set(self.position)
 
     def open(self):
