@@ -39,6 +39,10 @@ class Robot(magicbot.MagicRobot):
     def createObjects(self):
 
         # GOTTA DO STUFF
+
+        self.left_speed = 0
+        self.right_speed = 0 # Because we want our velocity to be equals to 0; at first
+
         self.fork_switch = wpilib.DigitalInput(1)
         self.gyro = wpilib.ADXRS450_Gyro()
 

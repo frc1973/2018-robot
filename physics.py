@@ -11,6 +11,7 @@
 # NOTE: THIS API IS ALPHA AND WILL MOST LIKELY CHANGE!
 #       ... if you have better ideas on how to implement, submit a patch!
 #
+import math
 
 from pyfrc.physics import drivetrains
 
@@ -40,6 +41,16 @@ class PhysicsEngine(object):
 
         self.physics_controller = physics_controller
         self.position = 0
+
+        # Setting the speed. It must be equivalent to the motor speed
+        self.driveTrain = self.driveTrain(self.left_motor, self.right_motor,speed=-0.7)
+
+        # Getting the value of the encoder to find out the
+        # revolutions in the wheels (In which angle has the robot turned)
+        self.encoder = 360 / (0.5 * math.pi)
+
+        self.left_disctance = 0 # starting from here
+        self.right_distance = 0 # starting from here
 
         self.elevator_position = 0
         self.fork_position = 0
@@ -73,6 +84,10 @@ class PhysicsEngine(object):
 
         speed, rotation = drivetrains.two_motor_drivetrain(l_motor, r_motor, speed=self.ft_per_sec)
         self.physics_controller.drive(speed, rotation, tm_diff)
+
+        # Let's update the encoder values
+        self.left_disctance += self.driveTrain.left_speed * tm_diff
+        self.right_distance += self.driveTrain.right_speed * tm_diff
 
         # Inches we traveled
         distance_inches = 12.0*speed*tm_diff
