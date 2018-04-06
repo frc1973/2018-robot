@@ -21,6 +21,10 @@ class Forklift:
     encoder = tunable(0)
     pid_p = tunable(0.9)
     set_p = None
+    
+    top_position = tunable(10000)
+    mid_position = tunable(1000)
+    low_position = tunable(0)
 
     def execute(self):
 
@@ -39,26 +43,18 @@ class Forklift:
         self.encoder = self.winch_motor.getSensorCollection().getQuadraturePosition()
 
 
-
-
     def normal(self, v):
         self.mode = 'pct'
         self.pct = v
 
-    '''
-        Figure out the exact
-        values for these variables
-
-    '''
-
     def top(self):
         self.mode = 'pos'
-        self.position = 3500
+        self.position = self.top_position
 
     def mid(self):
         self.mode = 'pos'
-        self.position = 2000
+        self.position = self.mid_position
 
     def bot(self):
         self.mode = 'pos'
-        self.position = 0
+        self.position = self.low_position

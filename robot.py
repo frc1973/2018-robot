@@ -39,7 +39,7 @@ class Robot(magicbot.MagicRobot):
     def createObjects(self):
 
         # GOTTA DO STUFF
-        self.fork_switch = wpilib.DigitalInput(1)
+        self.fork_switch = wpilib.DigitalInput(8)
         self.gyro = wpilib.ADXRS450_Gyro()
 
         self.left_motor = ctre.WPI_TalonSRX(5)
@@ -98,6 +98,8 @@ class Robot(magicbot.MagicRobot):
 
 
         self.joy = wpilib.Joystick(0)
+        
+        wpilib.CameraServer.launch()
 
     def teleopInit(self):
         pass

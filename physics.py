@@ -130,6 +130,6 @@ class PhysicsEngine(object):
 
         self.fork_position = max(min(3, self.fork_position), 0)
         if (0 <= self.fork_position <= 0.1) or (2.9 <= self.fork_position <= 3):
-            hal_data['dio'][1]['value'] = True
+            hal_data['dio'][3]['value'] = True
         else:
-            hal_data['dio'][1]['value'] = False
+            hal_data['dio'][3]['value'] = False

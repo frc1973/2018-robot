@@ -3,7 +3,7 @@
 import ctre
 from ctre import WPI_TalonSRX
 
-from magicbot import will_reset_to
+from magicbot import tunable, will_reset_to
 
 import wpilib
 
@@ -13,20 +13,26 @@ class Fork:
 
     position = will_reset_to(0)
     last_position = 0
+    
+    fork_switch_on = tunable(False)
 
     def execute(self):
+        
+        # TODO: the limit switch seems to be broken on the robot :(
+        self.fork_switch_on = self.fork_switch.get()
+        
         # if the limit switch is on and you last opened it,
         # and you are trying to open it
-        if self.fork_switch.get() and self.last_position == self.position:
-            self.position = 0
-        elif self.position != 0: # if nothing is being pressed - do this
-            self.last_position = self.position
-            
+        #if self.fork_switch_on and self.position and self.last_position == self.position:
+        #    self.position = 0
+        #elif self.position != 0: # if nothing is being pressed - do this
+        #    self.last_position = self.position
+        
         self.arm_motor.set(self.position)
+        #self.arm_motor.set(0)
 
     def open(self):
         self.position = -1
-
-# TODO: Check if the value is right(both functions)
+    
     def close(self):
         self.position = 1
