@@ -98,7 +98,7 @@ class Robot(magicbot.MagicRobot):
 
 
         self.joy = wpilib.Joystick(0)
-        
+
         wpilib.CameraServer.launch()
 
     def teleopInit(self):

@@ -33,7 +33,7 @@ class DriveTrain:
 # distance is .98
     def move(self, y, x):
         self.y = y
-        self.x = x
+        self.x = x -0.135
 
     def move2(self, deg):
         self.moveDeg = deg

@@ -21,9 +21,9 @@ class Forklift:
     encoder = tunable(0)
     pid_p = tunable(0.9)
     set_p = None
-    
-    top_position = tunable(10000)
-    mid_position = tunable(1000)
+
+    top_position = tunable(400)
+    mid_position = tunable(45)
     low_position = tunable(0)
 
     def execute(self):
